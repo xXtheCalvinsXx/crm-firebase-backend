@@ -11,7 +11,7 @@ exports.getAllEvents = (req, res) => {
             eventId: doc.id,
             Date: doc.data().Date,
             Description: doc.data().Description,
-            Occasion: doc.data().Ocassion,
+            Occasion: doc.data().Occasion,
           });
         });
         
@@ -54,6 +54,31 @@ exports.deleteEvent= (req, res) => {
     })
     .then(() => {
       res.json({ message: 'Event deleted successfully' });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+// Update an event, needs all fields to update correctly for now
+exports.updateEvent= (req, res) => {
+  const document = db.doc(`/events/${req.params.eventId}`);
+  document
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: 'Event not found' });
+      }
+      else {document.update({
+          Occasion: req.body.Occasion,
+          Description: req.body.Description,
+          Date: req.body.Date
+          })
+      }
+    })
+    .then(() => {
+      res.json({ message: 'Event updated successfully' });
     })
     .catch((err) => {
       console.error(err);
