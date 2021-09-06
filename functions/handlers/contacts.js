@@ -57,3 +57,25 @@ exports.addNewContact = (req, res) => {
         console.error(err);
       });
 };
+
+// Delete a contact
+exports.deleteContact= (req, res) => {
+  const document = db.doc(`/contacts/${req.params.contactsId}`);
+  document
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: 'Contact not found' });
+      }
+      else {
+        return document.delete();
+      }
+    })
+    .then(() => {
+      res.json({ message: 'Contact deleted successfully' });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
