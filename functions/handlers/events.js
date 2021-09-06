@@ -38,3 +38,25 @@ exports.addNewEvent = (req, res) => {
         console.error(err);
       });
 };
+
+// Delete an event
+exports.deleteEvent= (req, res) => {
+  const document = db.doc(`/events/${req.params.eventId}`);
+  document
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: 'Event not found' });
+      }
+      else {
+        return document.delete();
+      }
+    })
+    .then(() => {
+      res.json({ message: 'Event deleted successfully' });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};

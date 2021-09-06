@@ -7,19 +7,21 @@ const { db } = require('./util/admin');
 
 const { 
   getAllEvents,
-  addNewEvent
+  addNewEvent,
+  deleteEvent
 } = require('./handlers/events');
 
 // Event routes
 app.get('/events', getAllEvents);
-app.post('/addevent', addNewEvent);
+app.post('/event', addNewEvent);
+app.delete('/event/:eventId', deleteEvent);
 
 const { 
   getAllContacts,
   addNewContact
 } = require('./handlers/contacts');
 
-// Event routes
+// Contact routes
 app.get('/contacts', getAllContacts);
 app.post('/addcontact', addNewContact);
 
