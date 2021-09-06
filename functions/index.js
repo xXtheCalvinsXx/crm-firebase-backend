@@ -14,6 +14,15 @@ const {
 app.get('/events', getAllEvents);
 app.post('/addevent', addNewEvent);
 
+const { 
+  getAllContacts,
+  addNewContact
+} = require('./handlers/contacts');
+
+// Event routes
+app.get('/contacts', getAllContacts);
+app.post('/addcontact', addNewContact);
+
 
 app.get('/users', (req, res) => {
   db.collection('users')
