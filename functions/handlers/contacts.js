@@ -44,7 +44,6 @@ exports.addNewContact = (req, res) => {
       Industry: req.body.Industry,
       Email: req.body.Email,
       Phone_Number: req.body.Phone_Number,
-      
     };
   
     db.collection('contacts')
@@ -60,7 +59,7 @@ exports.addNewContact = (req, res) => {
 
 // Delete a contact
 exports.deleteContact= (req, res) => {
-  const document = db.doc(`/contacts/${req.params.contactsId}`);
+  const document = db.doc(`/contacts/${req.params.contactID}`);
   document
     .get()
     .then((doc) => {

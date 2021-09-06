@@ -16,12 +16,14 @@ app.post('/addevent', addNewEvent);
 
 const { 
   getAllContacts,
-  addNewContact
+  addNewContact,
+  deleteContact
 } = require('./handlers/contacts');
 
-// Event routes
+// Contact routes
 app.get('/contacts', getAllContacts);
 app.post('/addcontact', addNewContact);
+app.delete('/contact/:contactID', deleteContact);
 
 
 app.get('/users', (req, res) => {
