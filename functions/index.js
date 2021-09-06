@@ -1,26 +1,20 @@
 /* eslint-disable */
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
+
 const app = require('express')();
-// import firebase from '@firebase/app';
 
-const config = {
-  apiKey: 'AIzaSyC8Tmde2ZCuFnTtZ8HcFLcBckl_fAHs2pQ',
-  authDomain: 'xxthecalvinsxx.firebaseapp.com',
-  projectId: 'xxthecalvinsxx',
-  storageBucket: 'xxthecalvinsxx.appspot.com',
-  messagingSenderId: '499087288068',
-  appId: '1:499087288068:web:bff61ab7b5f29a81619251',
-  measurementId: 'G-GPSZ6V9868',
-};
-admin.initializeApp(config);
+const { db } = require('./util/admin');
 
-const db = admin.firestore();
-// firebase.initializeApp(config);
+const { 
+  getAllEvents,
+  addNewEvent
+} = require('./handlers/events');
 
-// @route   GET api/users
-// @desc    Gets list of users
-// @access  Public
+// Event routes
+app.get('/events', getAllEvents);
+app.post('/addevent', addNewEvent);
+
+
 app.get('/users', (req, res) => {
   db.collection('users')
     .orderBy('createdAt', 'desc')
