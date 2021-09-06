@@ -59,7 +59,7 @@ exports.addNewContact = (req, res) => {
 
 // Delete a contact
 exports.deleteContact= (req, res) => {
-  const document = db.doc(`/contacts/${req.params.contactID}`);
+  const document = db.doc(`/contacts/${req.params.contactId}`);
   document
     .get()
     .then((doc) => {
@@ -78,3 +78,38 @@ exports.deleteContact= (req, res) => {
       return res.status(500).json({ error: err.code });
     });
 };
+
+
+// Update a contact
+exports.updateContact= (req, res) => {
+  const document = db.doc(`/contacts/${req.params.contactId}`);
+  document
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: 'Contact not found' });
+      }
+      else {document.update({    
+          Name: req.body.Name,
+          Location: req.body.Location,
+          Company: req.body.Company,
+          Position: req.body.Position,
+          //Last_EVENT to fill after merge
+          //Next_EVENT 
+          Birthday: req.body.Birthday,
+          Education: req.body.Education,
+          Industry: req.body.Industry,
+          Email: req.body.Email,
+          Phone_Number: req.body.Phone_Number,})
+      }
+    })
+    .then(() => {
+      res.json({ message: 'Contact updated successfully' });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+

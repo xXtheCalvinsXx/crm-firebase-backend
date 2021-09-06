@@ -17,14 +17,15 @@ app.post('/addevent', addNewEvent);
 const { 
   getAllContacts,
   addNewContact,
-  deleteContact
+  deleteContact,
+  updateContact
 } = require('./handlers/contacts');
 
 // Contact routes
 app.get('/contacts', getAllContacts);
 app.post('/addcontact', addNewContact);
-app.delete('/contact/:contactID', deleteContact);
-
+app.delete('/contact/:contactId', deleteContact);
+app.put('/contact/:contactId', updateContact);
 
 app.get('/users', (req, res) => {
   db.collection('users')
