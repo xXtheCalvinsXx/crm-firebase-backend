@@ -3,7 +3,7 @@ const functions = require('firebase-functions');
 
 const app = require('express')();
 
-const { db } = require('./util/admin');
+const { db, admin } = require('./util/admin');
 
 const { 
   getAllEvents,
@@ -26,6 +26,8 @@ const {
 // Contact routes
 app.get('/contacts', getAllContacts);
 app.post('/addcontact', addNewContact);
+
+
 
 
 app.get('/users', (req, res) => {
@@ -51,11 +53,13 @@ app.get('/users', (req, res) => {
 // @route   POST api/signup
 // @desc    Add user
 // @access  Public
+
+// password must be at least 6 characters apparently
 app.post('/signup', (req, res) => {
   const newUser = {
     email: req.body.email,
     password: req.body.password,
-    password2: req.body.password2,
+    confirmPass: req.body.confirmPass,
     handle: req.body.handle,
   };
 
