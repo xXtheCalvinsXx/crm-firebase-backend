@@ -20,13 +20,16 @@ app.put('/event/:eventId', updateEvent);
 
 const { 
   getAllContacts,
-  addNewContact
+  addNewContact,
+  deleteContact,
+  updateContact
 } = require('./handlers/contacts');
 
 // Contact routes
 app.get('/contacts', getAllContacts);
 app.post('/addcontact', addNewContact);
-
+app.delete('/contact/:contactId', deleteContact);
+app.put('/contact/:contactId', updateContact);
 
 
 
