@@ -1,5 +1,6 @@
 const { db } = require('../util/admin');
 
+
 exports.getAllContacts = (req, res) => {
     db.collection('contacts')
       .orderBy('Date')
@@ -10,7 +11,7 @@ exports.getAllContacts = (req, res) => {
           contacts.push({
             contactId: doc.id,
             Date: doc.data().Date,
-            Name: doc.data().Description,
+            Name: doc.data().Name,
             Location: doc.data().Location,
             Position: doc.data().Position,
             Company: doc.data().Company,
@@ -27,6 +28,141 @@ exports.getAllContacts = (req, res) => {
         return res.json(contacts);
       })
       .catch((err) => console.error(err));
+};
+// search ,filter, sort contacts
+
+
+// sort alphabetically by name
+exports.orderByName = (req, res) => {
+  db.collection('contacts')
+    .orderBy('Name')
+    .get()
+    .then((data) => {
+      let contacts = [];
+      data.forEach((doc) => {
+        contacts.push({
+          contactId: doc.id,
+          Date: doc.data().Date,
+          Name: doc.data().Name,
+          Location: doc.data().Location,
+          Position: doc.data().Position,
+          Company: doc.data().Company,
+          //Last: 
+          //Next: 
+          Birthday: doc.data().Birthday,
+          Industry: doc.data().Industry,
+          Email: doc.data().Email,
+          Education: doc.data().Education,
+          Phone_Number: doc.data().Phone_Number
+        });
+      });
+      
+      return res.json(contacts);
+    })
+    .catch((err) => console.error(err));
+};
+
+
+// sort by location
+exports.orderByLocation = (req, res) => {
+  db.collection('contacts')
+    .orderBy('Location')
+    .get()
+    .then((data) => {
+      let contacts = [];
+      data.forEach((doc) => {
+        contacts.push({
+          contactId: doc.id,
+          Date: doc.data().Date,
+          Name: doc.data().Name,
+          Location: doc.data().Location,
+          Position: doc.data().Position,
+          Company: doc.data().Company,
+          //Last: 
+          //Next: 
+          Birthday: doc.data().Birthday,
+          Industry: doc.data().Industry,
+          Email: doc.data().Email,
+          Education: doc.data().Education,
+          Phone_Number: doc.data().Phone_Number
+        });
+      });
+      
+      return res.json(contacts);
+    })
+    .catch((err) => console.error(err));
+};
+
+
+// sort by company
+exports.orderByCompany= (req, res) => {
+  db.collection('contacts')
+    .orderBy('Company')
+    .get()
+    .then((data) => {
+      let contacts = [];
+      data.forEach((doc) => {
+        contacts.push({
+          contactId: doc.id,
+          Date: doc.data().Date,
+          Name: doc.data().Name,
+          Location: doc.data().Location,
+          Position: doc.data().Position,
+          Company: doc.data().Company,
+          //Last: 
+          //Next: 
+          Birthday: doc.data().Birthday,
+          Industry: doc.data().Industry,
+          Email: doc.data().Email,
+          Education: doc.data().Education,
+          Phone_Number: doc.data().Phone_Number
+        });
+      });
+      
+      return res.json(contacts);
+    })
+    .catch((err) => console.error(err));
+};
+
+
+// const q = query(collection(db, "cities"), where("capital", "==", true));
+
+// const querySnapshot = await getDocs(q);
+// querySnapshot.forEach((doc) => {
+//   // doc.data() is never undefined for query doc snapshots
+//   console.log(doc.id, " => ", doc.data());
+// });
+
+
+// filter by name
+exports.searchForName = (req, res) => {
+  db.collection('contacts')
+    .where('Name','==','joe')
+    .orderBy('Name')
+    .get()
+    .then((data) => {
+      let contacts = [];
+      data.forEach((doc) => {
+        contacts.push({
+          contactId: doc.id,
+          Date: doc.data().Date,
+          Name: doc.data().Name,
+          Location: doc.data().Location,
+          Position: doc.data().Position,
+          Company: doc.data().Company,
+          //Last: 
+          //Next: 
+          Birthday: doc.data().Birthday,
+          Industry: doc.data().Industry,
+          Email: doc.data().Email,
+          Education: doc.data().Education,
+          Phone_Number: doc.data().Phone_Number
+        });
+      });
+      
+      return res.json(contacts);
+    })
+    .catch((err) => console.error(err));
 };
 
 exports.addNewContact = (req, res) => {
