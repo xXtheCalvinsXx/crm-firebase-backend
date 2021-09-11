@@ -24,20 +24,22 @@ const {
   deleteContact,
   updateContact,
   orderByName,
-  searchForName,
+  // searchForName,
   orderByLocation,
-  orderByCompany
+  orderByCompany,
+  uploadImage
 } = require('./handlers/contacts');
 
 // Contact routes
 app.get('/contacts', getAllContacts);
 app.post('/addcontact', addNewContact);
-app.delete('/contact/:contactId', deleteContact);
-app.put('/contact/:contactId', updateContact);
+app.delete('/contacts/:contactId', deleteContact);
+app.put('/contacts/:contactId', updateContact);
 app.get('/contacts/sort/name',orderByName);
 app.get('/contacts/sort/location',orderByLocation);
 app.get('/contacts/sort/company',orderByCompany);
-app.get('/contacts/search/name',searchForName);
+app.post('/contacts/:contactId/image',uploadImage);
+// app.get('/contacts/search/name',searchForName);
 
 
 app.get('/users', (req, res) => {
