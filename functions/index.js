@@ -3,10 +3,11 @@ const functions = require('firebase-functions');
 
 const app = require('express')();
 
-const { db, admin } = require('./util/admin');
+// const { db, admin } = require('./util/admin');
 
 const { 
   getAllEvents,
+  getEventsByContact,
   addNewEvent,
   deleteEvent,
   updateEvent
@@ -14,6 +15,7 @@ const {
 
 // Event routes
 app.get('/events', getAllEvents);
+app.get('/events/:contactId', getEventsByContact);
 app.post('/event', addNewEvent);
 app.delete('/event/:eventId', deleteEvent);
 app.put('/event/:eventId', updateEvent);
