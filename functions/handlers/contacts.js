@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const { admin, db } = require('../util/admin');
 const config = require("../util/config");
 const noImg = "no-img.jpg";

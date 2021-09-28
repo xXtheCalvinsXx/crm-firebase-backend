@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const { db } = require('../util/admin');
 
 exports.getAllEvents = (req, res) => {
