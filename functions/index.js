@@ -34,9 +34,9 @@ const {
 
 // Contact routes
 app.get('/contacts', getAllContacts);
-app.post('/addcontact', addNewContact);
-app.delete('/contacts/:contactId', deleteContact);
-app.put('/contacts/:contactId', updateContact);
+app.post('/contact', addNewContact);
+app.delete('/contact/:contactId', deleteContact);
+app.put('/contact/:contactId', updateContact);
 app.get('/contacts/sort/name',orderByName);
 app.get('/contacts/sort/location',orderByLocation);
 app.get('/contacts/sort/company',orderByCompany);
