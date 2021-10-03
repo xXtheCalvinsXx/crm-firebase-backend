@@ -11,7 +11,7 @@ const {
   addNewEvent,
   deleteEvent,
   updateEvent
-} = require('./handlers/events');
+} = require('../functions/handlers/events');
 
 // Event routes
 app.get('/events', getAllEvents);
@@ -30,7 +30,7 @@ const {
   orderByLocation,
   orderByCompany,
   uploadImage
-} = require('./handlers/contacts');
+} = require('../functions/handlers/contacts');
 
 // Contact routes
 app.get('/contacts', getAllContacts);
