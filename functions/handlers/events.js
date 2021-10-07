@@ -9,14 +9,15 @@ exports.getAllEvents = (req, res) => {
       .then((data) => {
         let events = [];
         data.forEach((doc) => {
-          events.push({
-            eventId: doc.id,
-            Date: doc.data().Date,
-            Description: doc.data().Description,
-            Occasion: doc.data().Occasion,
-          });
-        });
-        
+          if (doc.data().RelevantUser == req.user.handle){
+            events.push({
+              eventId: doc.id,
+              Date: doc.data().Date,
+              Description: doc.data().Description,
+              Occasion: doc.data().Occasion,
+            });
+          }
+        });     
         return res.json(events);
       })
       .catch((err) => console.error(err));
@@ -29,7 +30,8 @@ exports.getEventsByContact = (req, res) => {
     .then((data) => {
       let events = [];
       data.forEach((doc) => {
-        if (doc.data().RelevantContact == req.params.contactId){
+        // get all our current user's events that are with a certain relevant contact
+        if ((doc.data().RelevantContact == req.params.contactId) & (doc.data().RelevantUser == req.user.handle)){
           events.push({
             eventId: doc.id,
             Date: doc.data().Date,
@@ -38,9 +40,7 @@ exports.getEventsByContact = (req, res) => {
             RelevantContact: doc.data().RelevantContact
           });
         }
-        
-      });
-      
+      });     
       return res.json(events);
     })
     .catch((err) => console.error(err));
@@ -52,6 +52,7 @@ exports.addNewEvent = (req, res) => {
       Occasion: req.body.Occasion,
       Description: req.body.Description,
       Date: new Date().toISOString(),
+      RelevantUser: req.user.handle
     };
   
     db.collection('events')
@@ -73,6 +74,9 @@ exports.deleteEvent= (req, res) => {
     .then((doc) => {
       if (!doc.exists) {
         return res.status(404).json({ error: 'Event not found' });
+      }
+      if (doc.data().RelevantUser !== req.user.handle){ // req.user.handle is from the middleware in auth.js
+        return res.status(403).json({ error: 'Unauthorized' });
       }
       else {
         return document.delete();
@@ -96,10 +100,14 @@ exports.updateEvent= (req, res) => {
       if (!doc.exists) {
         return res.status(404).json({ error: 'Event not found' });
       }
+      if (doc.data().RelevantUser !== req.user.handle){ // req.user.handle is from the middleware in auth.js
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
       else {document.update({
           Occasion: req.body.Occasion,
           Description: req.body.Description,
-          Date: req.body.Date
+          Date: req.body.Date,
+          RelevantUser: req.user.handle
           })
       }
     })

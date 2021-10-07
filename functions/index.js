@@ -3,6 +3,11 @@ const functions = require('firebase-functions');
 
 const app = require('express')();
 
+const Auth = require('./util/auth');
+
+// const cors = require('cors');
+// app.use(cors());
+
 // const { db, admin } = require('./util/admin');
 
 const { 
@@ -14,11 +19,11 @@ const {
 } = require('./handlers/events');
 
 // Event routes
-app.get('/events', getAllEvents);
-app.get('/events/:contactId', getEventsByContact);
-app.post('/event', addNewEvent);
-app.delete('/event/:eventId', deleteEvent);
-app.put('/event/:eventId', updateEvent);
+app.get('/events', Auth, getAllEvents);
+app.get('/events/:contactId', Auth, getEventsByContact);
+app.post('/event', Auth, addNewEvent);
+app.delete('/event/:eventId', Auth, deleteEvent);
+app.put('/event/:eventId', Auth, updateEvent);
 
 const { 
   getAllContacts,
