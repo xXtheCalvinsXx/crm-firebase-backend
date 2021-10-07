@@ -13,6 +13,7 @@ exports.getAllContacts = (req, res) => {
       .then((data) => {
         let contacts = [];
         data.forEach((doc) => {
+          if (doc.data().RelevantUser == req.user.handle){
           contacts.push({
             contactId: doc.id,
             Date: doc.data().Date,
@@ -29,9 +30,9 @@ exports.getAllContacts = (req, res) => {
             Phone_Number: doc.data().Phone_Number,
             imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
           });
-        });
-        
-        return res.json(contacts);
+        }
+      });
+      return res.json(contacts);
       })
       .catch((err) => console.error(err));
 };
@@ -190,6 +191,7 @@ exports.addNewContact = (req, res) => {
       Email: req.body.Email,
       Phone_Number: req.body.Phone_Number,
       imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
+      RelevantUser: req.user.handle
     };
   
     db.collection('contacts')
@@ -211,6 +213,9 @@ exports.deleteContact= (req, res) => {
     .then((doc) => {
       if (!doc.exists) {
         return res.status(404).json({ error: 'Contact not found' });
+      }
+      if (doc.data().RelevantUser !== req.user.handle){ // req.user.handle is from the middleware in auth.js
+        return res.status(403).json({ error: 'Unauthorized' });
       }
       else {
         return document.delete();
@@ -235,6 +240,9 @@ exports.updateContact= (req, res) => {
       if (!doc.exists) {
         return res.status(404).json({ error: 'Contact not found' });
       }
+      if (doc.data().RelevantUser !== req.user.handle){ // req.user.handle is from the middleware in auth.js
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
       else {document.update({    
           Name: req.body.Name,
           Location: req.body.Location,
@@ -246,7 +254,9 @@ exports.updateContact= (req, res) => {
           Education: req.body.Education,
           Industry: req.body.Industry,
           Email: req.body.Email,
-          Phone_Number: req.body.Phone_Number,})
+          Phone_Number: req.body.Phone_Number,
+          RelevantUser: req.user.handle
+        })
       }
     })
     .then(() => {
@@ -306,8 +316,18 @@ exports.uploadImage = (req, res) => {
       .then(() => {
         // Append token to url
         const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`;
-        return db.doc(`/contacts/${req.params.contactId}`).update({ imageUrl });
-        // return db.doc(`/users/${req.user.handle}`).update({ imageUrl });
+        const document = db.doc(`/contacts/${req.params.contactId}`);
+
+        if (!document.exists) {
+          return res.status(404).json({ error: 'Contact not found' });
+        }
+        if (document.data().RelevantUser !== req.user.handle){ // req.user.handle is from the middleware in auth.js
+          return res.status(403).json({ error: 'Unauthorized' });
+        }
+        else {
+          return document.update({ imageUrl });
+          // return db.doc(`/users/${req.user.handle}`).update({ imageUrl });
+        }
       })
       .then(() => {
         return res.json({ message: "image uploaded successfully" });

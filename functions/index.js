@@ -30,22 +30,22 @@ const {
   addNewContact,
   deleteContact,
   updateContact,
-  orderByName,
+  // orderByName,
   // searchForName,
-  orderByLocation,
-  orderByCompany,
+  // orderByLocation,
+  // orderByCompany,
   uploadImage
 } = require('./handlers/contacts');
 
 // Contact routes
-app.get('/contacts', getAllContacts);
-app.post('/contact', addNewContact);
-app.delete('/contact/:contactId', deleteContact);
-app.put('/contact/:contactId', updateContact);
-app.get('/contacts/sort/name',orderByName);
-app.get('/contacts/sort/location',orderByLocation);
-app.get('/contacts/sort/company',orderByCompany);
-app.post('/contacts/:contactId/image',uploadImage);
+app.get('/contacts', Auth, getAllContacts);
+app.post('/contact', Auth, addNewContact);
+app.delete('/contact/:contactId', Auth, deleteContact);
+app.put('/contact/:contactId', Auth, updateContact);
+// app.get('/contacts/sort/name',orderByName);
+// app.get('/contacts/sort/location',orderByLocation);
+// app.get('/contacts/sort/company',orderByCompany);
+app.post('/contacts/:contactId/image', Auth, uploadImage);
 // app.get('/contacts/search/name',searchForName);
 
 // Signup route
