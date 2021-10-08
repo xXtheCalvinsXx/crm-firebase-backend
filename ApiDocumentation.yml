@@ -1,400 +1,414 @@
-swagger: "2.0"
+openapi: 3.0.1
 info:
-  description: "APIs for CRM by xXtheCalvinsXx"
-  version: "1.0.0"
-  title: "CRM"
-host: "localhost:5001"
+  title: CRM
+  description: APIs for CRM by xXtheCalvinsXx
+  version: 1.0.0
+servers:
+  - url: https://localhost:5001/
+  - url: http://localhost:5001/
 tags:
-- name: "event"
-  description: "events within the CRM"
-- name: "contact"
-  description: "contacts within the CRM"
-schemes:
-- "https"
-- "http"
+  - name: event
+    description: events within the CRM
+  - name: contact
+    description: contacts within the CRM
+security:
+  - bearerAuth: [] 
 paths:
   /event:
     post:
       tags:
-      - "event"
-      summary: "Add a new event to the CRM"
-      description: ""
-      operationId: "addNewEvent"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Event object that needs to be added to the database"
+        - event
+      summary: Add a new event to the CRM
+      operationId: addNewEvent
+      requestBody:
+        description: Event object that needs to be added to the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Event'
         required: true
-        schema:
-          $ref: "#/definitions/Event"
       responses:
-        "200":
-          description: "event created successfully"
-        "500":
-          description: "Invalid input"
+        '200':
+          description: event created successfully
+          content: {}
+        '500':
+          description: Invalid input
+          content: {}
+      x-codegen-request-body-name: body
   /event/{eventId}:
     put:
       tags:
-      - "event"
-      summary: "Update an existing event"
-      description: ""
-      operationId: "updateEvent"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
+        - event
+      summary: Update an existing event
+      operationId: updateEvent
       parameters:
-      - name: "eventId"
-        in: "path"
-        description: "ID of event"
+        - name: eventId
+          in: path
+          description: ID of event
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Event object that needs to be added to the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Event'
         required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Event object that needs to be added to the database"
-        required: true
-        schema:
-          $ref: "#/definitions/Event"
       responses:
-        "404":
-          description: "Event not found"
-        "500":
-          description: "Error"
+        '404':
+          description: Event not found
+          content: {}
+        '500':
+          description: Error
+          content: {}
+      x-codegen-request-body-name: body
     delete:
       tags:
-      - "event"
-      summary: "Delete an existing event"
-      description: ""
-      operationId: "deleteEvent"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
+        - event
+      summary: Delete an existing event
+      operationId: deleteEvent
       parameters:
-      - name: "eventId"
-        in: "path"
-        description: "ID of event"
-        required: true
-        type: "string"      
+        - name: eventId
+          in: path
+          description: ID of event
+          required: true
+          schema:
+            type: string
       responses:
-        "200":
-          description: "Event deleted successfully"
-        "404":
-          description: "Event not found"
-        "500":
-          description: "Error"       
+        '200':
+          description: Event deleted successfully
+          content: {}
+        '404':
+          description: Event not found
+          content: {}
+        '500':
+          description: Error
+          content: {}
   /events:
     get:
       tags:
-      - "event"
-      summary: "Gets all events in database"
-      description: ""
-      operationId: "getAllEvents"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters: []
+        - event
+      summary: Gets all events in database
+      operationId: getAllEvents
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Event"
-            xml:
-              name: event
-        "400":
-          description: "Error occurred"
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+                xml:
+                  name: event
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: Error occurred
+          content: {}
   /events/{contactId}:
     get:
       tags:
-      - "event"
-      summary: "Find events by contactId"
-      description: "Returns all events for a contact"
-      operationId: "getEventsByContact"
-      produces:
-      - "application/xml"
-      - "application/json"
+        - event
+      summary: Find events by contactId
+      description: Returns all events for a contact
+      operationId: getEventsByContact
       parameters:
-      - name: "contactId"
-        in: "path"
-        description: "ID of relevant contact"
-        required: true
-        type: "string"
-      responses:
-        "200":
-          description: "successful operation"
+        - name: contactId
+          in: path
+          description: ID of relevant contact
+          required: true
           schema:
-            $ref: "#/definitions/Event"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Contact not found"
-
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Event'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Invalid ID supplied
+          content: {}
+        '404':
+          description: Contact not found
+          content: {}
   /contact:
     post:
       tags:
-      - "contact"
-      summary: "Add a new contact to the CRM"
-      description: ""
-      operationId: "addNewContact"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Event object that needs to be added to the database"
+        - contact
+      summary: Add a new contact to the CRM
+      operationId: addNewContact
+      requestBody:
+        description: Event object that needs to be added to the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Contact'
         required: true
-        schema:
-          $ref: "#/definitions/Contact"
       responses:
-        "200":
-          description: "event created successfully"
-        "500":
-          description: "Invalid input"
+        '200':
+          description: event created successfully
+          content: {}
+        '500':
+          description: Invalid input
+          content: {}
+      x-codegen-request-body-name: body
   /contact/{contactId}:
     put:
       tags:
-      - "contact"
-      summary: "Update an existing contact"
-      description: ""
-      operationId: "updateContact"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
+        - contact
+      summary: Update an existing contact
+      operationId: updateContact
       parameters:
-      - name: "eventId"
-        in: "path"
-        description: "ID of event"
+        - name: contactId
+          in: path
+          description: ID of contact
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Event object that needs to be added to the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Contact'
         required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Event object that needs to be added to the database"
-        required: true
-        schema:
-          $ref: "#/definitions/Contact"
       responses:
-        "404":
-          description: "Event not found"
-        "500":
-          description: "Error"
+        '404':
+          description: Event not found
+          content: {}
+        '500':
+          description: Error
+          content: {}
+      x-codegen-request-body-name: body
     delete:
       tags:
-      - "contact"
-      summary: "Delete an existing contact"
-      description: ""
-      operationId: "deleteEvent"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
+        - contact
+      summary: Delete an existing contact
+      operationId: deleteContact
       parameters:
-      - name: "eventId"
-        in: "path"
-        description: "ID of event"
-        required: true
-        type: "string"      
+        - name: contactId
+          in: path
+          description: ID of contact
+          required: true
+          schema:
+            type: string
       responses:
-        "200":
-          description: "Event deleted successfully"
-        "404":
-          description: "Event not found"
-        "500":
-          description: "Error"       
+        '200':
+          description: Event deleted successfully
+          content: {}
+        '404':
+          description: Event not found
+          content: {}
+        '500':
+          description: Error
+          content: {}
   /contacts:
     get:
       tags:
-      - "contact"
-      summary: "Gets all contacts in database"
-      description: ""
-      operationId: "getAllContacts"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters: []
+        - contact
+      summary: Gets all contacts in database
+      operationId: getAllContacts
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Contact"
-            xml:
-              name: event
-        "400":
-          description: "Error occurred"
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        '400':
+          description: Error occurred
+          content: {}
   /contacts/sort/name:
     get:
       tags:
-      - "contact"
-      summary: "Get contacts sorted by name"
-      description: ""
-      operationId: "orderByName"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters: []
+        - contact
+      summary: Get contacts sorted by name
+      operationId: orderByName
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Contact"
-            xml:
-              name: event
-        "400":
-          description: "Error occurred"    
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        '400':
+          description: Error occurred
+          content: {}
   /contacts/sort/location:
     get:
       tags:
-      - "contact"
-      summary: "Get contacts sorted by location"
-      description: ""
-      operationId: "orderByLocation"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters: []
+        - contact
+      summary: Get contacts sorted by location
+      operationId: orderByLocation
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Contact"
-            xml:
-              name: event
-        "400":
-          description: "Error occurred"    
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        '400':
+          description: Error occurred
+          content: {}
   /contacts/sort/company:
     get:
       tags:
-      - "contact"
-      summary: "Get contacts sorted by company"
-      description: ""
-      operationId: "orderByCompany"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters: []
+        - contact
+      summary: Get contacts sorted by company
+      operationId: orderByCompany
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Contact"
-            xml:
-              name: event
-        "400":
-          description: "Error occurred"   
-          
-  /contacts/{contactId}/image :
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        '400':
+          description: Error occurred
+          content: {}
+  /contacts/{contactId}/image:
     post:
       tags:
-      - "contact"
-      summary: "upload an image for a contact"
-      description: ""
-      operationId: "uploadImage"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters: 
-      - name: "contactId"
-        in: "path"
-        description: "ID of contact"
+        - contact
+      summary: upload an image for a contact
+      operationId: uploadImage
+      parameters:
+        - name: contactId
+          in: path
+          description: ID of contact
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Image file to be uploaded
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Image'
         required: true
-        type: "string"   
-      - in: "body"
-        name: "body"
-        description: "Image file to be uploaded"
-        required: true
-        schema:
-          $ref: "#/definitions/Image"      
       responses:
-        "200":
-          description: "successful operation"
-        "500":
-          description: "Error occurred"  
-        "400":
-          description: "wrong file type submitted" 
-definitions:
-  Event:
-    type: "object"
-    required:
-    - "Occasion"
-    - "Date"
-    properties:
-      Occasion:
-        type: "string"
-        example: "Kingsleys Birthday"
-      Date:
-        type: "string"
-      Description:
-        type: "string"
-
-        example: "remember to ask his brother for gift advice"
-  Image:
-    type: "string"
-    format: binary
-    
-  Contact:
-    type: "object"
-    required:
-    - "Name"
-    - "Email"
-    properties:
-      Name: 
-        type: "string"
-        example: "Calvin"
-      Location: 
-        type: "string"
-        example: "my house"
-      Date: 
-        type: "string"
-        example: "5/11/21"
-      Company: 
-        type: "string"
-        example: "Google"
-      Position: 
-        type: "string"
-        example: "CEO"
-      Birthday: 
-        type: "string"
-        example: "5/5/2001"
-      Education: 
-        type: "string"
-        example: "Unimelb"
-      Industry: 
-        type: "string"
-        example: "Adult"
-      Email: 
-        type: "string"
-        example: "calvinshen@lovely.com"
-      Phone_Number: 
-        type: "integer"
-        example: "0433116969"
-      imageUrl:
-        type: "string"
-        example: "https://firebasestorage.googleapis.com/v0/b/xxthecalvinsxx.appspot.com/o/535643731722.jpg?alt=media"
+        '200':
+          description: successful operation
+          content: {}
+        '400':
+          description: wrong file type submitted
+          content: {}
+        '500':
+          description: Error occurred
+          content: {}
+      x-codegen-request-body-name: body
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+  schemas:
+    Event:
+      required:
+        - Occasion
+      type: object
+      properties:
+        Occasion:
+          type: string
+          example: Kingsleys Birthday
+        Date:
+          type: string
+        Description:
+          type: string
+          example: remember to ask his brother for gift advice
+        RelevantContact:
+          type: string
+          example: LMAGRANKNAngat
+    Image:
+      type: string
+      format: binary
+    Contact:
+      required:
+        - Email
+        - Name
+      type: object
+      properties:
+        Name:
+          type: string
+          example: Calvin
+        Location:
+          type: string
+          example: my house
+        Date:
+          type: string
+          example: 5/11/21
+        Company:
+          type: string
+          example: Google
+        Position:
+          type: string
+          example: CEO
+        Birthday:
+          type: string
+          example: 5/5/2001
+        Education:
+          type: string
+          example: Unimelb
+        Industry:
+          type: string
+          example: Adult
+        Email:
+          type: string
+          example: calvinshen@lovely.com
+        Phone_Number:
+          type: integer
+          example: 433116969
+        imageUrl:
+          type: string
+          example: >-
+            https://firebasestorage.googleapis.com/v0/b/xxthecalvinsxx.appspot.com/o/535643731722.jpg?alt=media
