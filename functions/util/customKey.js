@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // code from firebase documentation
 
 // var {google} = require("googleapis");
