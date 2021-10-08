@@ -10,6 +10,9 @@ app.use(cors());
 
 // const { db, admin } = require('./util/admin');
 
+// const {getTestToken} = require('./util/customKey');
+// app.get('/customKey', getTestToken);
+
 const { 
   getAllEvents,
   getEventsByContact,
