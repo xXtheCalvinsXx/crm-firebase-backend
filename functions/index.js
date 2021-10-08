@@ -5,13 +5,13 @@ const app = require('express')();
 
 const Auth = require('./util/auth');
 
-// const cors = require('cors');
-// app.use(cors());
+const cors = require('cors');
+app.use(cors());
 
 // const { db, admin } = require('./util/admin');
 
-const {getTestToken} = require('./util/customKey');
-app.get('/customKey', getTestToken);
+// const {getTestToken} = require('./util/customKey');
+// app.get('/customKey', getTestToken);
 
 const { 
   getAllEvents,

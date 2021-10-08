@@ -4,8 +4,7 @@ const { admin, db } = require('../util/admin');
 const config = require("../util/config");
 const noImg = "no-img.jpg";
 
-
-
+// gets all contacts for a user
 exports.getAllContacts = (req, res) => {
     db.collection('contacts')
       .orderBy('Date')
@@ -37,145 +36,8 @@ exports.getAllContacts = (req, res) => {
       })
       .catch((err) => console.error(err));
 };
-// search ,filter, sort contacts
 
-
-// sort alphabetically by name
-exports.orderByName = (req, res) => {
-  db.collection('contacts')
-    .orderBy('Name')
-    .get()
-    .then((data) => {
-      let contacts = [];
-      data.forEach((doc) => {
-        contacts.push({
-          contactId: doc.id,
-          Date: doc.data().Date,
-          Name: doc.data().Name,
-          Location: doc.data().Location,
-          Position: doc.data().Position,
-          Company: doc.data().Company,
-          //Last: 
-          //Next: 
-          Birthday: doc.data().Birthday,
-          Industry: doc.data().Industry,
-          Email: doc.data().Email,
-          Education: doc.data().Education,
-          Phone_Number: doc.data().Phone_Number,
-          imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
-        });
-      });
-      
-      return res.json(contacts);
-    })
-    .catch((err) => console.error(err));
-};
-
-
-// sort by location
-exports.orderByLocation = (req, res) => {
-  db.collection('contacts')
-    .orderBy('Location')
-    .get()
-    .then((data) => {
-      let contacts = [];
-      data.forEach((doc) => {
-        contacts.push({
-          contactId: doc.id,
-          Date: doc.data().Date,
-          Name: doc.data().Name,
-          Location: doc.data().Location,
-          Position: doc.data().Position,
-          Company: doc.data().Company,
-          //Last: 
-          //Next: 
-          Birthday: doc.data().Birthday,
-          Industry: doc.data().Industry,
-          Email: doc.data().Email,
-          Education: doc.data().Education,
-          Phone_Number: doc.data().Phone_Number,
-          imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
-        });
-      });
-      
-      return res.json(contacts);
-    })
-    .catch((err) => console.error(err));
-};
-
-
-// sort by company
-exports.orderByCompany= (req, res) => {
-  db.collection('contacts')
-    .orderBy('Company')
-    .get()
-    .then((data) => {
-      let contacts = [];
-      data.forEach((doc) => {
-        contacts.push({
-          contactId: doc.id,
-          Date: doc.data().Date,
-          Name: doc.data().Name,
-          Location: doc.data().Location,
-          Position: doc.data().Position,
-          Company: doc.data().Company,
-          //Last: 
-          //Next: 
-          Birthday: doc.data().Birthday,
-          Industry: doc.data().Industry,
-          Email: doc.data().Email,
-          Education: doc.data().Education,
-          Phone_Number: doc.data().Phone_Number,
-          imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
-        });
-      });
-      
-      return res.json(contacts);
-    })
-    .catch((err) => console.error(err));
-};
-
-
-// const q = query(collection(db, "cities"), where("capital", "==", true));
-
-// const querySnapshot = await getDocs(q);
-// querySnapshot.forEach((doc) => {
-//   // doc.data() is never undefined for query doc snapshots
-//   console.log(doc.id, " => ", doc.data());
-// });
-
-
-// filter by name
-// exports.searchForName = (req, res) => {
-//   db.collection('contacts')
-//     .where('Name','==','joe')
-//     .orderBy('Name')
-//     .get()
-//     .then((data) => {
-//       let contacts = [];
-//       data.forEach((doc) => {
-//         contacts.push({
-//           contactId: doc.id,
-//           Date: doc.data().Date,
-//           Name: doc.data().Name,
-//           Location: doc.data().Location,
-//           Position: doc.data().Position,
-//           Company: doc.data().Company,
-//           //Last: 
-//           //Next: 
-//           Birthday: doc.data().Birthday,
-//           Industry: doc.data().Industry,
-//           Email: doc.data().Email,
-//           Education: doc.data().Education,
-//           Phone_Number: doc.data().Phone_Number
-//         });
-//       });
-      
-//       return res.json(contacts);
-//     })
-//     .catch((err) => console.error(err));
-// };
-
+// add a contact for a user
 exports.addNewContact = (req, res) => {
   
     const newContact = {
@@ -206,7 +68,7 @@ exports.addNewContact = (req, res) => {
       });
 };
 
-// Delete a contact
+// Delete a contact for a user
 exports.deleteContact= (req, res) => {
   const document = db.doc(`/contacts/${req.params.contactId}`);
   document
@@ -232,7 +94,7 @@ exports.deleteContact= (req, res) => {
 };
 
 
-// Update a contact
+// Update a contact for a user
 exports.updateContact= (req, res) => {
   const document = db.doc(`/contacts/${req.params.contactId}`);
   document
@@ -356,3 +218,140 @@ exports.uploadImage = (req, res) => {
   busboy.end(req.rawBody);
 };
 
+// search, filter and sort not needed any more
+
+// // sort alphabetically by name
+// exports.orderByName = (req, res) => {
+//   db.collection('contacts')
+//     .orderBy('Name')
+//     .get()
+//     .then((data) => {
+//       let contacts = [];
+//       data.forEach((doc) => {
+//         contacts.push({
+//           contactId: doc.id,
+//           Date: doc.data().Date,
+//           Name: doc.data().Name,
+//           Location: doc.data().Location,
+//           Position: doc.data().Position,
+//           Company: doc.data().Company,
+//           //Last: 
+//           //Next: 
+//           Birthday: doc.data().Birthday,
+//           Industry: doc.data().Industry,
+//           Email: doc.data().Email,
+//           Education: doc.data().Education,
+//           Phone_Number: doc.data().Phone_Number,
+//           imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
+//         });
+//       });
+      
+//       return res.json(contacts);
+//     })
+//     .catch((err) => console.error(err));
+// };
+
+
+// // sort by location
+// exports.orderByLocation = (req, res) => {
+//   db.collection('contacts')
+//     .orderBy('Location')
+//     .get()
+//     .then((data) => {
+//       let contacts = [];
+//       data.forEach((doc) => {
+//         contacts.push({
+//           contactId: doc.id,
+//           Date: doc.data().Date,
+//           Name: doc.data().Name,
+//           Location: doc.data().Location,
+//           Position: doc.data().Position,
+//           Company: doc.data().Company,
+//           //Last: 
+//           //Next: 
+//           Birthday: doc.data().Birthday,
+//           Industry: doc.data().Industry,
+//           Email: doc.data().Email,
+//           Education: doc.data().Education,
+//           Phone_Number: doc.data().Phone_Number,
+//           imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
+//         });
+//       });
+      
+//       return res.json(contacts);
+//     })
+//     .catch((err) => console.error(err));
+// };
+
+
+// // sort by company
+// exports.orderByCompany= (req, res) => {
+//   db.collection('contacts')
+//     .orderBy('Company')
+//     .get()
+//     .then((data) => {
+//       let contacts = [];
+//       data.forEach((doc) => {
+//         contacts.push({
+//           contactId: doc.id,
+//           Date: doc.data().Date,
+//           Name: doc.data().Name,
+//           Location: doc.data().Location,
+//           Position: doc.data().Position,
+//           Company: doc.data().Company,
+//           //Last: 
+//           //Next: 
+//           Birthday: doc.data().Birthday,
+//           Industry: doc.data().Industry,
+//           Email: doc.data().Email,
+//           Education: doc.data().Education,
+//           Phone_Number: doc.data().Phone_Number,
+//           imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
+//         });
+//       });
+      
+//       return res.json(contacts);
+//     })
+//     .catch((err) => console.error(err));
+// };
+
+
+// const q = query(collection(db, "cities"), where("capital", "==", true));
+
+// const querySnapshot = await getDocs(q);
+// querySnapshot.forEach((doc) => {
+//   // doc.data() is never undefined for query doc snapshots
+//   console.log(doc.id, " => ", doc.data());
+// });
+
+
+// filter by name
+// exports.searchForName = (req, res) => {
+//   db.collection('contacts')
+//     .where('Name','==','joe')
+//     .orderBy('Name')
+//     .get()
+//     .then((data) => {
+//       let contacts = [];
+//       data.forEach((doc) => {
+//         contacts.push({
+//           contactId: doc.id,
+//           Date: doc.data().Date,
+//           Name: doc.data().Name,
+//           Location: doc.data().Location,
+//           Position: doc.data().Position,
+//           Company: doc.data().Company,
+//           //Last: 
+//           //Next: 
+//           Birthday: doc.data().Birthday,
+//           Industry: doc.data().Industry,
+//           Email: doc.data().Email,
+//           Education: doc.data().Education,
+//           Phone_Number: doc.data().Phone_Number
+//         });
+//       });
+      
+//       return res.json(contacts);
+//     })
+//     .catch((err) => console.error(err));
+// };

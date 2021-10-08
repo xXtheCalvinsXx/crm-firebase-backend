@@ -40,6 +40,13 @@
 // };
 
 
+
+
+/*
+NOT USING THIS CODE RIGHT NOW, CUSTOM TOKENS ARE NOT VERIFIABLE
+ALSO, THE SDK JSON FILE SHOULD NOT BE PUBLIC AND SHOULD BE REMOVED BEFORE THE END PRODUCT
+*/
+
 const { admin } = require('./admin');
 
 exports.getTestToken = (req, res) => {

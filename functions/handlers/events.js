@@ -2,6 +2,7 @@
 
 const { db } = require('../util/admin');
 
+// gets all events for a user 
 exports.getAllEvents = (req, res) => {
     db.collection('events')
       .orderBy('Date')
@@ -25,6 +26,7 @@ exports.getAllEvents = (req, res) => {
       .catch((err) => console.error(err));
 };
 
+// gets all events for a user with respect to a certain contact
 exports.getEventsByContact = (req, res) => {
   db.collection('events')
     .orderBy('Date')
@@ -49,6 +51,7 @@ exports.getEventsByContact = (req, res) => {
     .catch((err) => console.error(err));
 };
 
+// adds a new event for a user
 exports.addNewEvent = (req, res) => {
   
     const newEvent = {
@@ -70,7 +73,7 @@ exports.addNewEvent = (req, res) => {
       });
 };
 
-// Delete an event
+// Delete an event for a user
 exports.deleteEvent= (req, res) => {
   const document = db.doc(`/events/${req.params.eventId}`);
   document
@@ -95,7 +98,7 @@ exports.deleteEvent= (req, res) => {
     });
 };
 
-// Update an event, needs all fields to update correctly for now
+// Update an event for a user, does not need all fields to be filled
 exports.updateEvent= (req, res) => {
   const document = db.doc(`/events/${req.params.eventId}`);
   document
