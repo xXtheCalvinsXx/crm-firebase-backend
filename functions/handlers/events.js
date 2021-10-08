@@ -9,12 +9,14 @@ exports.getAllEvents = (req, res) => {
       .then((data) => {
         let events = [];
         data.forEach((doc) => {
-          if (doc.data().RelevantUser == req.user.handle){
+          if (doc.data().RelevantUser == req.user.email){
             events.push({
               eventId: doc.id,
               Date: doc.data().Date,
               Description: doc.data().Description,
               Occasion: doc.data().Occasion,
+              RelevantContact: doc.data().RelevantContact,
+              RelevantUser: req.user.email
             });
           }
         });     
@@ -31,13 +33,14 @@ exports.getEventsByContact = (req, res) => {
       let events = [];
       data.forEach((doc) => {
         // get all our current user's events that are with a certain relevant contact
-        if ((doc.data().RelevantContact == req.params.contactId) & (doc.data().RelevantUser == req.user.handle)){
+        if ((doc.data().RelevantContact == req.params.contactId) & (doc.data().RelevantUser == req.user.email)){
           events.push({
             eventId: doc.id,
             Date: doc.data().Date,
             Description: doc.data().Description,
             Occasion: doc.data().Occasion,
-            RelevantContact: doc.data().RelevantContact
+            RelevantContact: doc.data().RelevantContact,
+            RelevantUser: req.user.email
           });
         }
       });     
@@ -51,8 +54,9 @@ exports.addNewEvent = (req, res) => {
     const newEvent = {
       Occasion: req.body.Occasion,
       Description: req.body.Description,
-      Date: new Date().toISOString(),
-      RelevantUser: req.user.handle
+      Date: req.body.Date,
+      RelevantContact: req.body.RelevantContact,
+      RelevantUser: req.user.email
     };
   
     db.collection('events')
@@ -75,7 +79,7 @@ exports.deleteEvent= (req, res) => {
       if (!doc.exists) {
         return res.status(404).json({ error: 'Event not found' });
       }
-      if (doc.data().RelevantUser !== req.user.handle){ // req.user.handle is from the middleware in auth.js
+      if (doc.data().RelevantUser !== req.user.email){ // req.user.email is from the middleware in auth.js
         return res.status(403).json({ error: 'Unauthorized' });
       }
       else {
@@ -100,15 +104,22 @@ exports.updateEvent= (req, res) => {
       if (!doc.exists) {
         return res.status(404).json({ error: 'Event not found' });
       }
-      if (doc.data().RelevantUser !== req.user.handle){ // req.user.handle is from the middleware in auth.js
+      if (doc.data().RelevantUser !== req.user.email){ // req.user.email is from the middleware in auth.js
         return res.status(403).json({ error: 'Unauthorized' });
       }
-      else {document.update({
-          Occasion: req.body.Occasion,
-          Description: req.body.Description,
-          Date: req.body.Date,
-          RelevantUser: req.user.handle
-          })
+      else {        
+        if(req.body.Occasion){
+          document.update({Occasion: req.body.Occasion});
+        }
+        if(req.body.Description){
+          document.update({Description: req.body.Description});
+        }
+        if(req.body.Date){
+          document.update({Date: req.body.Date});
+        }
+        if(req.body.RelevantContact){
+          document.update({RelevantContact: req.body.RelevantContact});
+        }
       }
     })
     .then(() => {
