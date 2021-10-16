@@ -7,7 +7,7 @@ const noImg = "no-img.jpg";
 // gets all contacts for a user
 exports.getAllContacts = (req, res) => {
     db.collection('contacts')
-      .orderBy('DateAdded', 'desc')
+      .orderBy('DateAdded')
       .get()
       .then((data) => {
         let contacts = [];
@@ -40,7 +40,7 @@ exports.getAllContacts = (req, res) => {
 // gets a contact
 exports.getContact = (req, res) => {
   db.collection('contacts')
-    .orderBy('DateAdded', 'desc')
+    .orderBy('DateAdded')
     .get()
     .then((data) => {
       let contacts = [];
