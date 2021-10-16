@@ -51,6 +51,30 @@ exports.getEventsByContact = (req, res) => {
     .catch((err) => console.error(err));
 };
 
+// gets an event
+exports.getEvent = (req, res) => {
+  db.collection('events')
+    .orderBy('Date')
+    .get()
+    .then((data) => {
+      let events = [];
+      data.forEach((doc) => {
+        if ((doc.id == req.params.eventId) & (doc.data().RelevantUser == req.user.email)){
+          events.push({
+            eventId: doc.id,
+            Date: doc.data().Date,
+            Description: doc.data().Description,
+            Occasion: doc.data().Occasion,
+            RelevantContact: doc.data().RelevantContact,
+            RelevantUser: req.user.email
+          });
+        }
+      });     
+      return res.json(events);
+    })
+    .catch((err) => console.error(err));
+};
+
 // adds a new event for a user
 exports.addNewEvent = (req, res) => {
   

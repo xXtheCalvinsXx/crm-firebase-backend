@@ -7,7 +7,7 @@ const noImg = "no-img.jpg";
 // gets all contacts for a user
 exports.getAllContacts = (req, res) => {
     db.collection('contacts')
-      .orderBy('Date')
+      .orderBy('DateAdded', 'desc')
       .get()
       .then((data) => {
         let contacts = [];
@@ -15,7 +15,7 @@ exports.getAllContacts = (req, res) => {
           if (doc.data().RelevantUser == req.user.email){
           contacts.push({
             contactId: doc.id,
-            Date: doc.data().Date,
+            DateAdded: doc.data().DateAdded,
             Name: doc.data().Name,
             Location: doc.data().Location,
             Position: doc.data().Position,
@@ -37,13 +37,46 @@ exports.getAllContacts = (req, res) => {
       .catch((err) => console.error(err));
 };
 
+// gets a contact
+exports.getContact = (req, res) => {
+  db.collection('contacts')
+    .orderBy('DateAdded', 'desc')
+    .get()
+    .then((data) => {
+      let contacts = [];
+      data.forEach((doc) => {
+        if ((doc.id == req.params.contactId) & (doc.data().RelevantUser == req.user.email)){
+        contacts.push({
+          contactId: doc.id,
+          DateAdded: doc.data().DateAdded,
+          Name: doc.data().Name,
+          Location: doc.data().Location,
+          Position: doc.data().Position,
+          Company: doc.data().Company,
+          //Last: 
+          //Next: 
+          Birthday: doc.data().Birthday,
+          Industry: doc.data().Industry,
+          Email: doc.data().Email,
+          Education: doc.data().Education,
+          Phone_Number: doc.data().Phone_Number,
+          imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
+          RelevantUser: req.user.email
+        });
+      }
+    });
+    return res.json(contacts);
+    })
+    .catch((err) => console.error(err));
+};
+
 // add a contact for a user
 exports.addNewContact = (req, res) => {
   
     const newContact = {
       Name: req.body.Name,
       Location: req.body.Location,
-      Date: new Date().toISOString(),
+      DateAdded: new Date().toISOString(),
       Company: req.body.Company,
       Position: req.body.Position,
       //Last_EVENT to fill after merge

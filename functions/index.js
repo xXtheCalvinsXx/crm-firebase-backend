@@ -16,6 +16,7 @@ app.use(cors());
 const { 
   getAllEvents,
   getEventsByContact,
+  getEvent,
   addNewEvent,
   deleteEvent,
   updateEvent
@@ -24,12 +25,14 @@ const {
 // Event routes
 app.get('/events', Auth, getAllEvents);
 app.get('/events/:contactId', Auth, getEventsByContact);
+app.get('/event/:eventId', Auth, getEvent);
 app.post('/event', Auth, addNewEvent);
 app.delete('/event/:eventId', Auth, deleteEvent);
 app.put('/event/:eventId', Auth, updateEvent);
 
 const { 
   getAllContacts,
+  getContact,
   addNewContact,
   deleteContact,
   updateContact,
@@ -42,6 +45,7 @@ const {
 
 // Contact routes
 app.get('/contacts', Auth, getAllContacts);
+app.get('/contact/:contactId', Auth, getContact);
 app.post('/contact', Auth, addNewContact);
 app.delete('/contact/:contactId', Auth, deleteContact);
 app.put('/contact/:contactId', Auth, updateContact);
