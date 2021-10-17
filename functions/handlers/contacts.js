@@ -91,7 +91,8 @@ exports.addNewContact = (req, res) => {
     };
   
     db.collection('contacts')
-      .add(newContact)
+      .doc(req.body.Email)
+      .set(newContact)
       .then((doc) => {
         res.json({ message: `document ${doc.id} created successfully` });
       })
