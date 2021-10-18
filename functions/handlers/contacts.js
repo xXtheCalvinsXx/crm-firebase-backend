@@ -28,7 +28,8 @@ exports.getAllContacts = (req, res) => {
             Education: doc.data().Education,
             Phone_Number: doc.data().Phone_Number,
             imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
-            RelevantUser: req.user.email
+            RelevantUser: req.user.email,
+            Notes: doc.data().Notes
           });
         }
       });
@@ -61,7 +62,8 @@ exports.getContact = (req, res) => {
           Education: doc.data().Education,
           Phone_Number: doc.data().Phone_Number,
           imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
-          RelevantUser: req.user.email
+          RelevantUser: req.user.email,
+          Notes: doc.data().Notes
         });
       }
     });
@@ -87,7 +89,8 @@ exports.addNewContact = (req, res) => {
       Email: req.body.Email,
       Phone_Number: req.body.Phone_Number,
       imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
-      RelevantUser: req.user.email
+      RelevantUser: req.user.email,
+      Notes: req.body.Notes
     };
   
     db.collection('contacts')
@@ -168,6 +171,9 @@ exports.updateContact= (req, res) => {
         }
         if(req.body.Phone_Number){
           document.update({Phone_Number: req.body.Phone_Number});
+        }
+        if(req.body.Notes){
+          document.update({Notes: req.body.Notes});
         }
       }
     })
