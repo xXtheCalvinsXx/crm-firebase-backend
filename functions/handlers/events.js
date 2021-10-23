@@ -10,15 +10,25 @@ exports.getAllEvents = (req, res) => {
       .then((data) => {
         let events = [];
         data.forEach((doc) => {
+
+          doc_data = {
+            eventId: doc.id,
+            RelevantContact: doc.data().RelevantContact,
+            RelevantUser: req.user.email
+          }
+
+          if (doc.data().Date){
+            doc_data.Date = doc.data().Date;
+          }
+          if (doc.data().Description){
+            doc_data.Description = doc.data().Description;
+          }
+          if (doc.data().Occasion){
+            doc_data.Occasion = doc.data().Occasion;
+          }
+
           if (doc.data().RelevantUser == req.user.email){
-            events.push({
-              eventId: doc.id,
-              Date: doc.data().Date,
-              Description: doc.data().Description,
-              Occasion: doc.data().Occasion,
-              RelevantContact: doc.data().RelevantContact,
-              RelevantUser: req.user.email
-            });
+            events.push(doc_data);
           }
         });     
         return res.json(events);
@@ -34,16 +44,26 @@ exports.getEventsByContact = (req, res) => {
     .then((data) => {
       let events = [];
       data.forEach((doc) => {
+
+        doc_data = {
+          eventId: doc.id,
+          RelevantContact: doc.data().RelevantContact,
+          RelevantUser: req.user.email
+        }
+
+        if (doc.data().Date){
+          doc_data.Date = doc.data().Date;
+        }
+        if (doc.data().Description){
+          doc_data.Description = doc.data().Description;
+        }
+        if (doc.data().Occasion){
+          doc_data.Occasion = doc.data().Occasion;
+        }
+
         // get all our current user's events that are with a certain relevant contact
         if ((doc.data().RelevantContact == req.params.contactId) & (doc.data().RelevantUser == req.user.email)){
-          events.push({
-            eventId: doc.id,
-            Date: doc.data().Date,
-            Description: doc.data().Description,
-            Occasion: doc.data().Occasion,
-            RelevantContact: doc.data().RelevantContact,
-            RelevantUser: req.user.email
-          });
+          events.push(doc_data);
         }
       });     
       return res.json(events);
@@ -59,15 +79,25 @@ exports.getEvent = (req, res) => {
     .then((data) => {
       let events = [];
       data.forEach((doc) => {
+
+        doc_data = {
+          eventId: doc.id,
+          RelevantContact: doc.data().RelevantContact,
+          RelevantUser: req.user.email
+        }
+
+        if (doc.data().Date){
+          doc_data.Date = doc.data().Date;
+        }
+        if (doc.data().Description){
+          doc_data.Description = doc.data().Description;
+        }
+        if (doc.data().Occasion){
+          doc_data.Occasion = doc.data().Occasion;
+        }
+
         if ((doc.id == req.params.eventId) & (doc.data().RelevantUser == req.user.email)){
-          events.push({
-            eventId: doc.id,
-            Date: doc.data().Date,
-            Description: doc.data().Description,
-            Occasion: doc.data().Occasion,
-            RelevantContact: doc.data().RelevantContact,
-            RelevantUser: req.user.email
-          });
+          events.push(doc_data);
         }
       });     
       return res.json(events);
@@ -79,12 +109,20 @@ exports.getEvent = (req, res) => {
 exports.addNewEvent = (req, res) => {
   
     const newEvent = {
-      Occasion: req.body.Occasion,
-      Description: req.body.Description,
-      Date: req.body.Date,
       RelevantContact: req.body.RelevantContact,
       RelevantUser: req.user.email
     };
+
+    if (req.body.Date){
+      newEvent.Date = req.body.Date;
+    }
+    if (req.body.Description){
+      newEvent.Description = req.body.Description;
+    }
+    if (req.body.Occasion){
+      newEvent.Occasion = req.body.Occasion;
+    }
+
   
     db.collection('events')
       .add(newEvent)

@@ -12,25 +12,46 @@ exports.getAllContacts = (req, res) => {
       .then((data) => {
         let contacts = [];
         data.forEach((doc) => {
-          if (doc.data().RelevantUser == req.user.email){
-          contacts.push({
+
+          doc_data = {
             contactId: doc.id,
             DateAdded: doc.data().DateAdded,
-            Name: doc.data().Name,
-            Location: doc.data().Location,
-            Position: doc.data().Position,
-            Company: doc.data().Company,
-            //Last: 
-            //Next: 
-            Birthday: doc.data().Birthday,
-            Industry: doc.data().Industry,
-            Email: doc.data().Email,
-            Education: doc.data().Education,
-            Phone_Number: doc.data().Phone_Number,
             imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
             RelevantUser: req.user.email,
-            Notes: doc.data().Notes
-          });
+          };
+          if (doc.data().Name){
+            doc_data.Name = doc.data().Name;
+          }
+          if (doc.data().Location){
+            doc_data.Location = doc.data().Location;
+          }
+          if (doc.data().Position){
+            doc_data.Position = doc.data().Position;
+          }
+          if (doc.data().Company){
+            doc_data.Company = doc.data().Company;
+          }
+          if (doc.data().Birthday){
+            doc_data.Birthday = doc.data().Birthday;
+          }
+          if (doc.data().Industry){
+            doc_data.Industry = doc.data().Industry;
+          }
+          if (doc.data().Email){
+            doc_data.Email = doc.data().Email;
+          }
+          if (doc.data().Education){
+            doc_data.Education = doc.data().Education;
+          }
+          if (doc.data().Phone_Number){
+            doc_data.Phone_Number = doc.data().Phone_Number;
+          }
+          if (doc.data().Notes){
+            doc_data.Notes = doc.data().Notes;
+          }
+
+          if (doc.data().RelevantUser == req.user.email){
+          contacts.push(doc_data);
         }
       });
       return res.json(contacts);
@@ -46,25 +67,46 @@ exports.getContact = (req, res) => {
     .then((data) => {
       let contacts = [];
       data.forEach((doc) => {
-        if ((doc.id == req.params.contactId) & (doc.data().RelevantUser == req.user.email)){
-        contacts.push({
+
+        doc_data = {
           contactId: doc.id,
           DateAdded: doc.data().DateAdded,
-          Name: doc.data().Name,
-          Location: doc.data().Location,
-          Position: doc.data().Position,
-          Company: doc.data().Company,
-          //Last: 
-          //Next: 
-          Birthday: doc.data().Birthday,
-          Industry: doc.data().Industry,
-          Email: doc.data().Email,
-          Education: doc.data().Education,
-          Phone_Number: doc.data().Phone_Number,
           imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
           RelevantUser: req.user.email,
-          Notes: doc.data().Notes
-        });
+        };
+        if (doc.data().Name){
+          doc_data.Name = doc.data().Name;
+        }
+        if (doc.data().Location){
+          doc_data.Location = doc.data().Location;
+        }
+        if (doc.data().Position){
+          doc_data.Position = doc.data().Position;
+        }
+        if (doc.data().Company){
+          doc_data.Company = doc.data().Company;
+        }
+        if (doc.data().Birthday){
+          doc_data.Birthday = doc.data().Birthday;
+        }
+        if (doc.data().Industry){
+          doc_data.Industry = doc.data().Industry;
+        }
+        if (doc.data().Email){
+          doc_data.Email = doc.data().Email;
+        }
+        if (doc.data().Education){
+          doc_data.Education = doc.data().Education;
+        }
+        if (doc.data().Phone_Number){
+          doc_data.Phone_Number = doc.data().Phone_Number;
+        }
+        if (doc.data().Notes){
+          doc_data.Notes = doc.data().Notes;
+        }
+
+        if ((doc.id == req.params.contactId) & (doc.data().RelevantUser == req.user.email)){
+        contacts.push(doc_data);
       }
     });
     return res.json(contacts);
@@ -76,26 +118,45 @@ exports.getContact = (req, res) => {
 exports.addNewContact = (req, res) => {
   
     const newContact = {
-      Name: req.body.Name,
-      Location: req.body.Location,
       DateAdded: new Date().toISOString(),
-      Company: req.body.Company,
-      Position: req.body.Position,
-      //Last_EVENT to fill after merge
-      //Next_EVENT 
-      Birthday: req.body.Birthday,
-      Education: req.body.Education,
-      Industry: req.body.Industry,
-      Email: req.body.Email,
-      Phone_Number: req.body.Phone_Number,
       imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
       RelevantUser: req.user.email,
-      Notes: req.body.Notes
     };
+
+    if (req.body.Name){
+      newContact.Name = req.body.Name;
+    }
+    if (req.body.Location){
+      newContact.Location = req.body.Location;
+    }
+    if (req.body.Company){
+      newContact.Company = req.body.Company;
+    }
+    if (req.body.Position){
+      newContact.Position = req.body.Position;
+    }
+    if (req.body.Birthday){
+      newContact.Birthday = req.body.Birthday;
+    }
+    if (req.body.Education){
+      newContact.Education = req.body.Education;
+    }
+    if (req.body.Industry){
+      newContact.Industry = req.body.Industry;
+    }
+    if (req.body.Email){
+      newContact.Email = req.body.Email;
+    }
+    if (req.body.Phone_Number){
+      newContact.Phone_Number = req.body.Phone_Number;
+    }
+    if (req.body.Notes){
+      newContact.Notes = req.body.Notes;
+    }
+
   
     db.collection('contacts')
-      .doc(req.body.Email)
-      .set(newContact)
+      .add(newContact)
       .then((doc) => {
         res.json({ message: `document ${doc.id} created successfully` });
       })
