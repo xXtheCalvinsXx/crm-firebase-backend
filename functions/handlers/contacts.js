@@ -166,8 +166,9 @@ exports.addNewContact = (req, res) => {
       });
 };
 
-// Delete a contact for a user
+// Delete a contact and its events 
 exports.deleteContact= (req, res) => {
+  
   const document = db.doc(`/contacts/${req.params.contactId}`);
   document
     .get()
@@ -179,11 +180,24 @@ exports.deleteContact= (req, res) => {
         return res.status(403).json({ error: 'Unauthorized' });
       }
       else {
+
+        // deletes all corresponding events first
+        db.collection('events')
+        .get()
+        .then((data) => {
+          //let events = [];
+          data.forEach((eventDoc) => {
+            if ((eventDoc.data().RelevantContact == req.params.contactId) & (eventDoc.data().RelevantUser == req.user.email)){
+              db.doc(`/events/${eventDoc.id}`).delete();              
+            }
+          })
+        })
+
         return document.delete();
       }
     })
     .then(() => {
-      res.json({ message: 'Contact deleted successfully' });
+      res.json({ message: 'Contact and its events deleted successfully' });
     })
     .catch((err) => {
       console.error(err);
