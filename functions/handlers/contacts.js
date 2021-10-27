@@ -158,7 +158,7 @@ exports.addNewContact = (req, res) => {
     db.collection('contacts')
       .add(newContact)
       .then((doc) => {
-        res.json({ message: `document ${doc.id} created successfully` });
+        return res.json(doc.id);
       })
       .catch((err) => {
         res.status(500).json({ error: 'something went wrong' });

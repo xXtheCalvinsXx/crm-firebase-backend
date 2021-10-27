@@ -127,7 +127,7 @@ exports.addNewEvent = (req, res) => {
     db.collection('events')
       .add(newEvent)
       .then((doc) => {
-        res.json({ message: `document ${doc.id} created successfully` });
+        return res.json(doc.id);
       })
       .catch((err) => {
         res.status(500).json({ error: 'something went wrong' });
